@@ -159,25 +159,25 @@ async def delete_file(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    file = await get_file_or_404(session, filename)
-    if file.user_id != current_user.id:
+    file_data = await get_file_or_404(session, filename)
+    if file_data.user_id != current_user.id:
         raise HTTPException(
             detail='Можно удалять только свои файлы',
             status_code=status.HTTP_403_FORBIDDEN,
         )
 
-    if not os.path.exists(file.path):
-        await delete_file_data(session, file)
+    if not os.path.exists(file_data.path):
+        await delete_file_data(session, file_data)
         raise HTTPException(
             detail='Файл не найден.', status_code=status.HTTP_404_NOT_FOUND
         )
 
     try:
-        os.remove(file.path)
+        os.remove(file_data.path)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_501_NOT_IMPLEMENTED,
             detail=f'Ошибка во время удаления файла: {str(e)}',
         )
-    await delete_file_data(session, file)
+    await delete_file_data(session, file_data)
     return {'detail': 'Файл успешно удален.'}
