@@ -32,7 +32,9 @@ class UserAuthentication(BaseModel):
 
 
 class UserCreate(UserAuthentication):
-    username: str = Field(max_length=MAX_USERNAME_LENGTH, pattern=r'^[\w.@+-]+$')
+    username: str = Field(
+        max_length=MAX_USERNAME_LENGTH, pattern=r'^[\w.@+-]+$'
+    )
 
 
 class UserBase(BaseModel):

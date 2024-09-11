@@ -1,4 +1,5 @@
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)  ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)  ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+
 
 ## Описание проекта
 
@@ -11,7 +12,7 @@
 - Python 3.9
 - FastAPI
 - SqlAlchemy
-
+- PostgreSQL
 
 ### Запуск проекта
 
@@ -46,9 +47,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
+
 Документация доступна после запуска по адресу:
 
 http://127.0.0.1:8000/docs
+
+
 
 ### Как загружать файлы через Postman
 
@@ -69,6 +73,8 @@ http://127.0.0.1:8000/docs
 Щелкните раскрывающийся список справа от ключа и измените его с «text» на «file».
 
 В поле «Значение» щелкните «Choose file» и выберите файл, который вы хотите загрузить с вашего компьютера.
+
+
 
 Пример POST запроса для создания пользователя:
 
@@ -225,6 +231,6 @@ http://127.0.0.1:8000/api/v1/files/655604e8-fced-45f4-8117-63df9aca54c9
 http://127.0.0.1:8000/api/v1/files/2c885614-59d4-4458-be12-93b5f1064009/download
 
 
-Пример DELETE запроса на удаление файла(можно удалять только свои файлф):
+Пример DELETE запроса на удаление файла(можно удалять только свои файлы):
 
 http://127.0.0.1:8000/api/v1/files/2c885614-59d4-4458-be12-93b5f1064009

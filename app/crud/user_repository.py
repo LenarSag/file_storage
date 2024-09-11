@@ -12,18 +12,24 @@ from app.schemas.user import UserCreate
 async def check_username_and_email(
     session: AsyncSession, username: str, email: EmailStr
 ) -> Optional[User]:
-    query = select(User).where(or_(User.username == username, User.email == email))
+    query = select(User).where(
+        or_(User.username == username, User.email == email)
+    )
     result = await session.execute(query)
     return result.scalar()
 
 
-async def get_user_by_id(session: AsyncSession, user_id: int) -> Optional[User]:
+async def get_user_by_id(
+    session: AsyncSession, user_id: int
+) -> Optional[User]:
     query = select(User).filter_by(id=user_id)
     result = await session.execute(query)
     return result.scalar()
 
 
-async def get_user_by_email(session: AsyncSession, email: EmailStr) -> Optional[User]:
+async def get_user_by_email(
+    session: AsyncSession, email: EmailStr
+) -> Optional[User]:
     query = select(User).filter_by(email=email)
     result = await session.execute(query)
     return result.scalar()

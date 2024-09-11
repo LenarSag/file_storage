@@ -33,7 +33,8 @@ async def get_file_or_404(
     file = await get_file_by_uuid(session, filename)
     if not file:
         raise HTTPException(
-            detail='Файл не найден или удален.', status_code=status.HTTP_400_BAD_REQUEST
+            detail='Файл не найден или удален.',
+            status_code=status.HTTP_400_BAD_REQUEST
         )
     return file
 
@@ -106,13 +107,17 @@ async def download_file(
             while contents := await f.read(FILE_CHUNK_SIZE):
                 yield contents
 
-    headers = {'Content-Disposition': f'attachment; filename="{file.filename}"'}
+    headers = (
+        {'Content-Disposition': f'attachment; filename="{file.filename}"'}
+    )
     return StreamingResponse(
         iterfile(), headers=headers, media_type=f'{file.content_type}'
     )
 
 
-@filesrouter.post('/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED)
+@filesrouter.post(
+        '/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED
+)
 async def upload(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),

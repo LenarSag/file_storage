@@ -17,14 +17,18 @@ loginrouter = APIRouter()
 async def create_new_user(
     user_data: UserCreate, session: AsyncSession = Depends(get_session)
 ):
-    user = await check_username_and_email(session, user_data.username, user_data.email)
+    user = await check_username_and_email(
+        session, user_data.username, user_data.email
+    )
     if user:
         if user.username == user_data.username:
             raise HTTPException(
-                detail='Имя уже используется.', status_code=status.HTTP_400_BAD_REQUEST
+                detail='Имя уже используется.',
+                status_code=status.HTTP_400_BAD_REQUEST
             )
         raise HTTPException(
-            detail='Почта уже используется', status_code=status.HTTP_400_BAD_REQUEST
+            detail='Почта уже используется',
+            status_code=status.HTTP_400_BAD_REQUEST
         )
 
     user_data.password = get_hashed_password(user_data.password)
@@ -37,7 +41,9 @@ async def create_new_user(
 async def get_token(
     user_data: UserAuthentication, session: AsyncSession = Depends(get_session)
 ):
-    user = await authenticate_user(session, user_data.email, user_data.password)
+    user = await authenticate_user(
+        session, user_data.email, user_data.password
+    )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -26,7 +26,9 @@ class User(Base):
     )
     password: Mapped[str] = mapped_column(nullable=False)
 
-    files = relationship('File', back_populates='user', cascade='all, delete-orphan')
+    files = relationship(
+        'File', back_populates='user', cascade='all, delete-orphan'
+    )
 
     @validates('email')
     def validate_email(self, key, email):
