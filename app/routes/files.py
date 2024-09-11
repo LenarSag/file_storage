@@ -116,7 +116,7 @@ async def download_file(
 
 
 @filesrouter.post(
-        '/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED
+    '/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED
 )
 async def upload(
     session: AsyncSession = Depends(get_session),
