@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.exceptions import ValidationException
 from pydantic import ValidationError
 import uvicorn
@@ -21,16 +21,16 @@ app.include_router(filesrouter, prefix=f'{API_URL}/files')
 
 @app.exception_handler(ValidationException)
 async def custom_pydantic_validation_exception_handler(request, exc):
-    return Response(
-        content={'detail': exc.errors()},
+    return HTTPException(
+        detail=exc.errors(),
         status_code=status.HTTP_400_BAD_REQUEST,
     )
 
 
 @app.exception_handler(ValidationError)
 async def custom_pydantic_validation_error_handler(request, exc):
-    return Response(
-        content={'detail': exc.errors()},
+    return HTTPException(
+        detail=exc.errors(),
         status_code=status.HTTP_400_BAD_REQUEST,
     )
 

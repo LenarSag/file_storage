@@ -33,8 +33,7 @@ async def get_file_or_404(
     file = await get_file_by_uuid(session, filename)
     if not file:
         raise HTTPException(
-            detail='Файл не найден или удален.',
-            status_code=status.HTTP_400_BAD_REQUEST
+            detail='Файл не найден или удален.', status_code=status.HTTP_400_BAD_REQUEST
         )
     return file
 
@@ -100,24 +99,33 @@ async def download_file(
     current_user: User = Depends(get_current_user),
 ):
     file = await get_file_or_404(session, filename)
+    if not os.path.exists(file.path):
+        await delete_file_data(session, file)
+        raise HTTPException(
+            detail='Файл не найден.', status_code=status.HTTP_404_NOT_FOUND
+        )
 
-    async def iterfile():
-        # Отправляет файл порциями, по 1мб для экономии памяти
-        async with aiofiles.open(file.path, 'rb') as f:
-            while contents := await f.read(FILE_CHUNK_SIZE):
-                yield contents
+    try:
 
-    headers = (
-        {'Content-Disposition': f'attachment; filename="{file.filename}"'}
-    )
-    return StreamingResponse(
-        iterfile(), headers=headers, media_type=f'{file.content_type}'
-    )
+        async def iterfile():
+            # Отправляет файл порциями, по 1мб для экономии памяти
+            async with aiofiles.open(file.path, 'rb') as f:
+                while contents := await f.read(FILE_CHUNK_SIZE):
+                    yield contents
+
+        headers = {'Content-Disposition': f'attachment; filename="{file.filename}"'}
+        return StreamingResponse(
+            iterfile(), headers=headers, media_type=f'{file.content_type}'
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            detail={'message': f'Ошибка во время скачивания файла: {str(e)}'},
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        )
 
 
-@filesrouter.post(
-    '/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED
-)
+@filesrouter.post('/upload', response_model=FileDB, status_code=status.HTTP_201_CREATED)
 async def upload(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
