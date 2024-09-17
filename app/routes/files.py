@@ -45,18 +45,6 @@ async def get_my_files_data(
     current_user: User = Depends(get_current_user),
 ):
     result = await get_user_paginated_files(session, params, current_user.id)
-    result.items = [
-        FileDB(
-            id=file.id,
-            unique_filename=file.unique_filename,
-            filename=file.filename,
-            size=file.size,
-            content_type=file.content_type,
-            created_at=file.created_at,
-            user_id=file.user_id,
-        )
-        for file in result.items
-    ]
     return result
 
 
@@ -67,18 +55,6 @@ async def get_files_data(
     current_user: User = Depends(get_current_user),
 ):
     result = await get_paginated_files(session, params)
-    result.items = [
-        FileDB(
-            id=file.id,
-            unique_filename=file.unique_filename,
-            filename=file.filename,
-            size=file.size,
-            content_type=file.content_type,
-            created_at=file.created_at,
-            user_id=file.user_id,
-        )
-        for file in result.items
-    ]
     return result
 
 
